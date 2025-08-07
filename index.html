@@ -1,31 +1,136 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Subscription Tracker</title>
-  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --green-light: #d1f7c4;
+      --green-main: #66bb6a;
+      --green-dark: #388e3c;
+      --bg: #f7fff5;
+      --text: #222;
+      --card-bg: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      padding: 2rem;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 2rem;
+      color: var(--green-dark);
+    }
+
+    .filters {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .filters button {
+      background: var(--green-main);
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .card {
+      background: var(--card-bg);
+      padding: 1rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+      border-left: 6px solid var(--green-main);
+    }
+
+    .card h3 {
+      margin-bottom: 0.5rem;
+      color: var(--green-dark);
+    }
+
+    .card p {
+      margin-bottom: 0.3rem;
+      font-size: 14px;
+    }
+  </style>
 </head>
+
 <body>
-  <div class="container">
-    <h1>My Subscriptions</h1>
+  <h1>📊 Subscription Tracker</h1>
 
-    <div class="category">
-      <h2>🎬 Entertainment</h2>
-      <ul id="entertainment-list"></ul>
-    </div>
-
-    <div class="category">
-      <h2>🍔 Food</h2>
-      <ul id="food-list"></ul>
-    </div>
-
-    <div class="category">
-      <h2>🧰 Utilities</h2>
-      <ul id="utilities-list"></ul>
-    </div>
+  <div class="filters">
+    <button onclick="filterCategory('All')">All</button>
+    <button onclick="filterCategory('Entertainment')">Entertainment</button>
+    <button onclick="filterCategory('Food')">Food</button>
+    <button onclick="filterCategory('Utilities')">Utilities</button>
   </div>
 
-  <script src="script.js"></script>
+  <div class="grid" id="subscriptionGrid"></div>
+
+  <script>
+    const subscriptions = [
+      { name: 'Netflix', category: 'Entertainment', cost: '$12.99', renewal: '2025-09-01', note: 'Renew early' },
+      { name: 'Spotify', category: 'Entertainment', cost: '$9.99', renewal: '2025-08-20' },
+      { name: 'HBO Max', category: 'Entertainment', cost: '$10.99', renewal: '2025-08-15' },
+      { name: 'YouTube Premium', category: 'Entertainment', cost: '$11.99', renewal: '2025-09-01' },
+      { name: 'Wolt+', category: 'Food', cost: '$5.99', renewal: '2025-08-10' },
+      { name: 'Glovo+', category: 'Food', cost: '$6.50', renewal: '2025-08-25' },
+      { name: 'Google Drive', category: 'Utilities', cost: '$1.99', renewal: '2025-09-05' },
+      { name: 'Grammarly Pro', category: 'Utilities', cost: '$12.00', renewal: '2025-08-12' },
+    ];
+
+    let currentFilter = 'All';
+
+    function render() {
+      const grid = document.getElementById('subscriptionGrid');
+      grid.innerHTML = '';
+      const filtered = currentFilter === 'All' ? subscriptions : subscriptions.filter(sub => sub.category === currentFilter);
+
+      filtered.forEach(sub => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.innerHTML = `
+          <h3>${sub.name}</h3>
+          <p><strong>Category:</strong> ${sub.category}</p>
+          <p><strong>Cost:</strong> ${sub.cost}</p>
+          <p><strong>Renewal:</strong> ${sub.renewal}</p>
+          ${sub.note ? `<p><strong>Note:</strong> ${sub.note}</p>` : ''}
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function filterCategory(category) {
+      currentFilter = category;
+      render();
+    }
+
+    render();
+  </script>
 </body>
+
 </html>
